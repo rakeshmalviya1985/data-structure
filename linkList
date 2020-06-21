@@ -1,0 +1,832 @@
+/******************************************************************************
+
+All Link List related function
+
+*******************************************************************************/
+
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+class node
+{
+    public:
+    int data;
+    node* next;
+};
+
+node* newNode(int data)
+{
+    node* tmp = new node();
+    tmp->data = data;
+    tmp->next = NULL;
+    
+    return tmp;
+    
+}
+node* insertAtEnd(node* root , int data)
+{
+    if(root == NULL)
+    return  newNode(data);
+    
+    node* tmp  = newNode(data);
+    node* tmpHead = root;
+    while(root->next != NULL)
+    {
+        
+        root = root->next;
+        
+    }
+    
+    root->next = tmp;
+    
+    return tmpHead;
+    
+}
+
+node* deleteKey(node* root , int data)
+{
+    if(root == NULL)
+    return root;
+    
+    node* tmpHead = root;
+    
+    if(root->data == data)
+    {
+        tmpHead = root->next;
+        
+         node* tmp = root;
+         tmp->next = NULL;
+         
+         delete tmp;
+         return tmpHead;
+    }
+    while(root != NULL)
+    {
+        if(root->next->data == data)
+        {
+            node* tmp = root->next;
+            
+            root->next = root->next->next;
+            
+            delete tmp;
+            break;
+        }
+        
+        root = root->next;
+    }
+    
+    return tmpHead;
+}
+
+
+void findMidleElement(node* root)
+{
+    if(root == NULL)
+    return ;
+    
+    node* curr = root;
+    node* next = root;
+    while(root != NULL && root->next != NULL && next->next != NULL )
+    {
+      curr = curr->next;
+      next = next->next->next;
+    }
+    
+    cout<<" \n Midle element : "<<curr->data;
+}
+void print(node* root)
+{
+    cout<<"\n";
+    if(root == NULL)
+    return;
+    
+    cout<<"\n";
+    while(root != NULL)
+    {
+        cout<<" "<<root->data;
+        root = root->next;
+    }
+}
+
+node* makeLoop(node* root , int data)
+{
+    if(root == NULL)
+    return root;
+    
+    node* tmp = NULL;
+    node* tmpHead = root;
+    
+    while(root != NULL)
+    {
+        if(root->data == data )
+        {
+            tmp = root;
+            root = tmpHead;
+            break;
+        }
+        root = root->next;
+    }
+    while(root->next != NULL)
+    {
+       root = root->next; 
+    }
+    
+    root->next = tmp;
+    
+    return tmpHead;
+    
+}
+
+void detectLoop(node* root)
+{
+    if(root == NULL)
+    return;
+    
+    node* curr = root;
+    node* next = root;
+    
+    while(curr != NULL & next != NULL)
+    {
+        curr = curr->next;
+        next = next->next->next;
+        if(curr == next)
+        {
+            cout<<"\nLoop detected";
+            break;
+        }
+        
+
+    }
+    
+    
+}
+int  findLengthOfLoop(node* root)
+{
+    if(root == NULL)
+    return 0;
+    int count = 1;
+    node* curr = root;
+    node* next = root;
+    
+    while(curr != NULL & next != NULL)
+    {
+                
+        curr = curr->next;
+        next = next->next->next;
+
+        if(curr == next)
+        {
+            cout<<"\nLoop detected";
+            break;
+        }
+
+    }
+    
+
+    next = curr->next;
+    
+    while(curr != next)
+    {
+        count++;
+        next = next->next;
+    }
+    
+    return count;
+}
+
+
+node* removeLoop(node* root)
+{
+    if(root == NULL)
+    return root;
+    
+    int len  = findLengthOfLoop(root);
+    cout<<" len :  "<<len;
+    
+    int i=1;
+   
+    node* tmpHead = root;
+    node* next = root;
+    node* curr = root;
+    while(i < len)
+    {
+        next = next->next;
+        i++;
+    }
+    
+    cout<<"next->data"<<next->data;
+    
+    while(curr != next->next)
+    {
+        curr = curr->next;
+        next = next->next;
+    }
+    
+    next->next = NULL;
+    
+    return tmpHead;
+}
+
+node* removeDuplicate(node* root)
+{
+    if(root == NULL)
+    return root;
+    
+    node* tmpHead = root;
+    node* curr = root;
+    
+    while(curr != NULL && curr->next != NULL)
+    {
+        if(curr->data == curr->next->data)
+        {
+            node* tmp = curr->next;
+            curr->next = curr->next->next;
+            delete tmp;
+            
+        }
+        else
+        curr = curr->next;
+    }
+    
+    
+    return tmpHead;
+}
+
+void makeInterSectionList(node** root , node** root1 , int intSecPoint)
+{
+    if((*root1 == NULL) || (*root) == NULL)
+    {
+        cout<<"we can't make makeInterSectionList";
+        return;
+    }
+    
+   node* tmpRoot = (*root);
+    node* tmpRoot1 = (*root1);
+    
+    while(tmpRoot1->next != NULL)
+    {
+        tmpRoot1 = tmpRoot1->next;
+    }
+    int count = 1;
+    while(tmpRoot != NULL && count < intSecPoint)
+    {
+        tmpRoot = tmpRoot->next;
+        count++;
+    }
+    tmpRoot1->next = tmpRoot;
+    
+}
+
+
+void detectIntersectionPoint(node* root , node* root1)
+{
+    
+    if(root1 == NULL || root == NULL)
+    {
+        cout<<"There is no intSecPoint ";
+        return;
+    }
+    int rootLen = 0;
+    int root1Len = 0;
+    
+    node* tmpRoot= root;
+    node* tmpRoot1 = root1;
+    
+    
+    while(root != NULL)
+    {
+        rootLen++;
+        root = root->next;
+    }
+    
+    cout<<"\n rootLen : "<<rootLen;
+     while(root1 != NULL)
+    {
+        root1Len++;
+        root1 = root1->next;
+    }
+    cout<<"\n root1Len : "<<root1Len;
+    
+    root = tmpRoot;
+    root1 = tmpRoot1;
+    
+    int diff = 0;
+    if(root1Len > rootLen )
+    {
+        diff = root1Len - rootLen; 
+        int i = 1;
+        while(root1 != NULL && i<=diff)
+        {
+            root1 = root1->next;
+            i++;
+        }
+    }
+    else
+    {
+         diff = rootLen - root1Len; 
+         int i = 1;
+        while(root != NULL && i<=diff )
+        {
+            root = root->next;
+        }
+    }
+    
+    cout<<"\n diff : "<<diff;    
+    cout<<"\n root : "<<root->data;
+    cout<<"\n root1 : "<<root1->data;
+    
+    while( root1 != root )
+    {
+        root = root->next;
+        root1 = root1->next;
+    }
+    
+    cout<<"\n inter section Point : "<<root->data;
+}
+
+void printMultiHead(node* root , node* root1)
+{
+    if(root1 == NULL && root == NULL)
+    return;
+    
+    cout<<"\n Inside printMultiHead";
+    cout<<"\n";
+    while(root != NULL)
+    {
+        cout<<" "<<root->data;
+        root = root->next;
+    }
+    cout<<"\n";
+    while(root1 != NULL)
+    {
+        cout<<" "<<root1->data;
+        root1 = root1->next;
+    }
+    
+    
+    
+}
+
+node* reveseLinkList(node* root)
+{
+     if(root == NULL)
+	   return root;
+
+     node* prev = NULL;
+     node* curr = root;
+     node* next = root;
+     
+     while(curr != NULL &&  next != NULL)
+     {
+         
+         next = curr->next;
+         curr->next = prev;
+         prev = curr;
+         curr = next;
+     }
+     
+     
+     return prev;
+}
+
+void twoPointerReverseList(node** root)
+{
+    if((*root) == NULL)
+    return;
+    
+    node* curr = (*root);
+    node* next;
+    
+    while(curr->next != NULL)
+    {
+        next =  curr->next;
+        curr->next = next->next;
+        next->next = (*root);
+        (*root) = next;
+        //curr = curr->next;
+    }
+}
+
+node* groupReverse(node* root , int k)
+{
+    if(root == NULL)
+    return root;
+    
+    node* prev = NULL;
+    node* curr = root;
+    stack<node*> stk;
+    
+    while(curr != NULL)
+    {
+        int count = 0;
+        
+        while(curr != NULL && count < k)
+        {
+            stk.push(curr);
+            curr = curr->next;
+            count++;
+            
+        }
+        
+        
+        while(stk.size() > 0)
+        {
+            if(prev == NULL)
+            {
+                prev = stk.top();
+                root = prev;
+                stk.pop();
+            }
+            else
+            {
+                prev->next = stk.top();
+                prev = prev->next;
+                stk.pop();
+            }
+        }
+    }
+    
+    prev->next = NULL;
+    
+    return root;
+    
+    
+}
+
+
+node* alternateGroupReverse(node* root , int k)
+{
+    if(root == NULL)
+    return root;
+    
+    node* prev = NULL;
+    node* curr = root;
+    node* next ;
+    int count =0;
+    while(curr != NULL && count < k)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+        count++;
+    }
+    
+    if(curr != NULL)
+    root->next = curr;
+    
+    count = 0;
+    while(curr != NULL && count < k-1)
+    {
+        curr = curr->next;
+        count++;
+    }
+    
+    
+    if(curr != NULL)
+    curr->next = alternateGroupReverse(curr->next , k);
+    
+    return prev; 
+    
+}
+bool checkTwoListIdentical(node* root ,node* root1)
+{
+    if(root == NULL && root1 == NULL)
+    return true;
+    
+    if((root != NULL && root1 == NULL) || (root == NULL && root1 != NULL))
+    return false;
+    
+    if(root->data == root1->data)
+    checkTwoListIdentical(root->next ,root1->next);
+    else 
+    return false;
+}
+
+node* rotateLinkList(node* root , int k)
+{
+    if(root == NULL && root->next != NULL)
+    return root;
+    
+    node* curr = root;
+    node* next = root->next;
+    node* tmpRoot = NULL;
+    int count = 1;
+    while(curr != NULL && count < k)
+    {
+        curr = curr->next;
+        next = next->next;
+        count++;
+    }
+    
+   // cout<<" curr  "<<curr->data;
+   // cout<<" next  "<<next->data;
+    curr->next = NULL;
+    tmpRoot = next;
+    while(next->next != NULL)
+    {
+        next = next->next;
+    }
+    
+    next->next = root;
+    
+    return tmpRoot;
+    
+}
+
+node* AddTwoLinkList(node* root , node* root1)
+{
+    if(root1 == NULL)
+    return root;
+    
+    if(root == NULL)
+    return root1;
+    
+    int num1 = 0;
+    int num2 = 0;
+    int sum = 0;
+    
+    while(root != NULL)
+    {
+        
+        num1 = num1*10 + root->data;
+        
+        root = root->next;
+    }
+    
+    cout<<" num1 " <<num1; 
+    while(root1 != NULL)
+    {
+        
+        num2 = num2*10 + root1->data;
+        
+        root1 = root1->next;
+    }
+    
+    cout<<" num1 " <<num2;  
+    
+    sum = num2 + num1;
+    cout<<" sum " <<sum;
+    
+    int mod = 10;
+    node* tmpRoot = NULL;
+    node* tmp1 = NULL;
+    while(sum%mod > 0)
+    {
+        int num = sum%mod;
+        sum = sum/10;
+        cout<<" "<<num;
+        
+        node* tmp = newNode(num);
+        tmp->next = tmpRoot;
+
+        tmpRoot = tmp;
+
+    }
+    return tmpRoot;
+}
+
+bool findLinkListPalidrome(node* root)
+{
+    if(root == NULL)
+    return false;
+    
+    stack<node*> stk;
+    node* tmpRoot = root;
+    while(tmpRoot != NULL)
+    {
+        stk.push(tmpRoot);
+        tmpRoot = tmpRoot->next;
+        
+    }
+    
+
+    while( root != NULL)
+    {
+        cout<<"\n root : "<<root->data <<" top : "<<stk.top()->data;
+        
+        if(root->data == stk.top()->data)
+        {
+            root = root->next;
+            stk.pop();
+        }
+        else
+          return false;
+        
+    }
+    
+    if(stk.size() == 0)
+    return true;
+    else
+    return false;
+}
+
+node* shiftKeyAtEnd(node* root , int data)
+{
+    if(root == NULL)
+    return root;
+    
+    node* tmpRoot = NULL;
+    node* prev = NULL;
+    node* curr = root;
+    node* next = root;
+    node* end = NULL;
+    stack<node*> stk;
+    while(root != NULL)
+    {
+       stk.push(root);
+       if(root->next == NULL)
+       end = root;
+       root = root->next;
+    }
+    //1-1-2-3-1-4-5-1
+    while(curr != end)
+    {
+       
+        next = curr->next;
+        if(curr->data == data)
+        {
+            if(prev == NULL)
+            {
+                curr->next = NULL;
+                stk.top()->next = curr;
+                stk.push(curr);
+            }
+            else
+            {
+                prev->next = next;
+                curr->next = NULL;
+                stk.top()->next = curr;
+                stk.push(curr);               
+            }
+        }
+        else
+        {
+            prev = curr;
+            if(tmpRoot == NULL)
+              tmpRoot = curr;
+        }
+        curr = next;
+    }
+    
+    return tmpRoot;
+    
+    
+}
+/*-----------------------------------------------------
+doubly Link List
+-------------------------------------------------------*/
+class dnode
+{
+public:
+    int data;
+    dnode* next;
+    dnode* prev;
+};
+
+dnode* dnewNode(int data)
+{
+    dnode* tmp = new dnode();
+    tmp->data = data;
+    tmp->next = NULL;
+    tmp->prev = NULL;
+    
+    return tmp;
+}
+
+void dReverseprint(dnode* root)
+{
+    if(root == NULL)
+    return;
+    
+    while(root->next != NULL)
+    {
+        root = root->next;
+    }
+    
+    cout<<"\n Now printing revese\n";
+    
+    while(root != NULL)
+    {
+        cout<<" "<<root->data;
+        root = root->prev;
+    }
+}
+
+void dForwardprint(dnode* root)
+{
+    cout<<"\n";
+    if(root == NULL)
+    return;
+    
+    cout<<"\n";
+    while(root != NULL)
+    {
+        cout<<" "<<root->data;
+        root = root->next;
+    }
+}
+dnode* dinsertAtEnd(dnode* root , int data)
+{
+    if(root == NULL)
+       return dnewNode(data);  
+       
+       dnode* tmpRoot = root;
+       dnode* tmp =dnewNode(data); 
+       while(root->next != NULL)
+       {
+          root =  root->next;
+       }
+       
+       root->next = tmp;
+       tmp->prev = root;
+       
+       return tmpRoot;
+}
+dnode* makeDoublyList(node* root)
+{
+    dnode* tmpRoot = NULL;
+    
+    if(root == NULL)
+    return tmpRoot;
+    
+    while(root != NULL)
+    {
+        tmpRoot = dinsertAtEnd(tmpRoot ,root->data);
+        root = root->next;
+        
+       
+        
+    }
+    
+    return tmpRoot;
+}
+
+void findPairOfGivenNumber(dnode* root , int sum)
+{
+    //1 <-> 2 <-> 4 <-> 5 <-> 6 <-> 8 <-> 9 , sum = 7
+    bool found = false;
+    if(root == NULL)
+    return;
+    
+    cout<<"\n";
+    dnode* backPtr = root;
+     
+    while(backPtr->next != NULL)
+        backPtr = backPtr->next;
+    
+    while(root != NULL && backPtr != NULL && root != backPtr && root != backPtr->next)
+    {
+        
+        
+        if((root->data + backPtr->data) ==  sum)
+        {
+            cout<<"( "<<root->data<<","<<backPtr->data<<")";
+            root = root->next;
+            backPtr = backPtr->prev;
+            
+            found = true;
+        }
+        else
+        {
+            if((root->data + backPtr->data) <  sum)
+             root = root->next;
+            else
+             backPtr = backPtr->prev;
+        }
+        
+    }
+    
+    return ;
+}
+int main()
+{
+    
+    node* root = NULL;
+    dnode* droot = NULL;
+    
+    root = insertAtEnd(root,1);
+    root = insertAtEnd(root , 2);
+    root = insertAtEnd(root , 3);
+    root = insertAtEnd(root , 4);
+    root = insertAtEnd(root , 5);
+	root = insertAtEnd(root , 6);
+	root = insertAtEnd(root , 7);
+	root = insertAtEnd(root , 8);
+	root = insertAtEnd(root , 9);
+	root = insertAtEnd(root , 10);
+	root = insertAtEnd(root , 11);
+	root = insertAtEnd(root , 12);
+	root = insertAtEnd(root , 13);
+	root = insertAtEnd(root , 14);
+	root = insertAtEnd(root , 15);
+	root = insertAtEnd(root , 1);
+
+
+    print(root);
+    root = shiftKeyAtEnd(root ,1);
+    print(root);
+    return 0;
+}
