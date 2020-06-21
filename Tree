@@ -1,0 +1,530 @@
+/******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <bits/stdc++.h>
+#include <vector>
+using namespace std;
+
+class treeNode
+{
+    public:
+    int data;
+    treeNode* left;
+    treeNode* right;
+};
+
+
+
+treeNode* newNode(int data)
+{
+    treeNode* tmp = new treeNode();
+    
+    tmp->data = data;
+    tmp->right = NULL;
+    tmp->left = NULL;
+    return tmp;
+}
+
+
+ /* -----------------------------------------------------
+                 Left Right Root 
+ -----------------------------------------------------*/
+void InoderTreePrint(treeNode* root)
+{
+
+
+    if(root == NULL)
+    return ;
+    
+    InoderTreePrint(root->left);
+    cout<<" "<<root->data;
+    InoderTreePrint(root->right);
+    
+}
+/* -----------------------------------------------------
+
+    breadth first print in BST tree or Levelwise print
+  
+--------------------------------------------------------*/
+void breadthFirstPrint(treeNode* root)
+{
+    if(root == NULL)
+    return;
+    
+    queue<treeNode*> q;
+    
+    q.push(root);
+    
+    while(!q.empty())
+    {
+        treeNode* tmp = q.front();
+        
+        cout<<" "<<tmp->data;
+        
+        q.pop();
+        
+        if(tmp->left)
+        q.push(tmp->left);
+        
+        if(tmp->right)
+        q.push(tmp->right);
+    }    
+    
+}
+
+
+void postOrderTraversal(treeNode* root)
+{
+    if(root == NULL)
+    return ;
+    
+    postOrderTraversal(root->left);
+    
+    postOrderTraversal(root->right);
+    cout<<" "<<root->data;
+    
+}
+
+void preOrderTraversal(treeNode* root)
+{
+    if(root == NULL)
+    return ;
+    
+    cout<<" "<<root->data;
+    preOrderTraversal(root->left);
+    preOrderTraversal(root->right);
+    
+    
+}
+/* -----------------------------------------------------
+
+depth first print in BST tree or inoder without recursion 
+--------------------------------------------------------*/
+
+void InoderTreePrintStack(treeNode* root)
+{
+    
+    if(root == NULL)
+    return;
+    
+    stack<treeNode*> stk;
+    
+    treeNode* curr = root;
+    
+    while(curr != NULL || !stk.empty())
+    {
+        
+        while(curr != NULL)
+        {
+            stk.push(curr);
+            curr = curr->left;
+        }
+        
+        
+        curr = stk.top();
+        cout<<" "<<curr->data;
+        stk.pop();
+        curr = curr->right;
+    }
+    
+}
+
+int search(int arr[], int x, int n) 
+{ 
+    for (int i = 0; i < n; i++) 
+        if (arr[i] == x) 
+            return i; 
+    return -1; 
+} 
+void ConvertToPostFromPreAndInorder(int in[] , int pre[] , int size )
+{
+
+
+   int rootIndex = search(in , pre[0] , size);
+   
+   if(rootIndex != 0)
+   ConvertToPostFromPreAndInorder(in , pre+1 , rootIndex);
+   
+   if(rootIndex != size-1)
+   ConvertToPostFromPreAndInorder(in+rootIndex+1 , pre+rootIndex+1 , size-rootIndex-1);
+   
+   cout<<" "<<pre[0];
+    
+}
+
+treeNode* insertBST(treeNode* root , int data)
+{
+    if(root == NULL)
+     return newNode(data);
+     
+    if(data < root->data)
+    {
+        root->left = insertBST(root->left , data);
+    }
+    else
+    {
+        root->right = insertBST(root->right, data);
+    }
+     
+     return root;
+}
+
+int getBSTTree(vector<int> &vec ,int size , int pos , treeNode* root ,  int left , int right)
+{
+    
+        if(pos==size || vec[pos]<left || vec[pos]>right) //Bousizedary case
+            return pos;
+        
+        if(vec[pos]<root->data)     //Isizesert isize left-subtree
+        {
+            root->left = newNode(vec[pos]);
+            pos += 1;
+            pos = getBSTTree(vec,size,pos,root->left,left,root->data-1);
+        }
+
+        /* need to understand why this condition is placed
+        if(pos == size || vec[pos] < left || vec[pos] > right)
+        return pos;*/
+    
+        root->right = newNode(vec[pos]);
+        
+        pos = pos+1;
+        pos = getBSTTree(vec , size , pos , root->right , root->data+1 ,  right);
+        
+    return pos;
+}
+
+treeNode* constructBSTFromPreorder(vector<int> &vec)
+{
+    int size = vec.size();
+    if(size == 0)
+    return NULL;
+    treeNode *root = newNode(vec[0]);
+    if(size == 1)
+    return root;
+    
+   int pos =  getBSTTree(vec , size , 1 , root ,INT_MIN, INT_MAX);
+           //construct_BST(preorder,n,1,root,INT_MIN,INT_MAX);
+    
+    return root;
+}
+
+treeNode* leftMostNode(treeNode* root)
+{
+    if(root == NULL)
+    return root;
+    
+    while(root->left != NULL)
+    {
+        root = root->left;
+    }
+    
+    return root;
+}
+
+treeNode* rightMostNode(treeNode* root)
+{
+    if(root == NULL)
+    return root;
+    
+	while (root->right)
+		root = root->right;
+
+
+    return root;
+}
+void findInorderPredecessorOfBST(treeNode* root , treeNode*&succ , int data)
+{
+      if(root == NULL)
+      {
+          succ = NULL;
+          return;
+      }
+      
+      if(data == root->data)
+      {
+          if(root->left)
+          succ = rightMostNode(root->left);
+      }
+      else if(data < root->data )
+      {
+          
+          if(root->left)
+              findInorderPredecessorOfBST(root->left , succ ,data);
+          else
+          {
+          succ = NULL;
+          return;
+          }
+      }
+      else
+      {
+          succ = root;
+          if(root->right)
+               findInorderPredecessorOfBST(root->right , succ , data);
+          else
+          {
+           succ = NULL;
+           return;
+          }
+      }
+}
+void findInorderSuccessorOfBST(treeNode* root , treeNode*&succ , int data)
+{
+      if(root == NULL)
+      {
+          succ = NULL;
+          return;
+      }
+      
+      if(data == root->data)
+      {
+          if(root->right)
+          succ = leftMostNode(root->right);
+      }
+      else if(data < root->data )
+      {
+          succ = root;
+          if(root->left)
+              findInorderSuccessorOfBST(root->left , succ ,data);
+          else
+          {
+          succ = NULL;
+          return;
+          }
+      }
+      else
+      {
+          if(root->right)
+               findInorderSuccessorOfBST(root->right , succ , data);
+          else
+          {
+           succ = NULL;
+           return;
+          }
+      }
+}
+
+
+void printInoderSuccPred(treeNode* root)
+{
+    
+    treeNode* succPred = NULL;
+    findInorderSuccessorOfBST(root , succPred , 10);
+    if(succPred)
+    cout<<"\n succ "<<succPred->data;
+    else
+    cout<<"\ndid not find successor";
+    
+    findInorderPredecessorOfBST(root , succPred , 40);
+    
+    if(succPred)
+    cout<<"\n pred "<<succPred->data;
+    else
+    cout<<"\ndid not find successor";
+}
+
+void ChangeLevelAndPrintLevelWise(treeNode* root)
+{
+    
+    if(root == NULL)
+      return;
+    
+    queue<treeNode*> q;
+    stack<treeNode*> stk;
+    
+    q.push(root);
+    
+    int count = 0;
+    bool qPrintInd = false;
+    
+    while(!q.empty())
+    {
+        count++;
+        int size = q.size();
+        for(int i =0 ; i<size;i++)
+        {
+             treeNode* tmp = q.front();
+             
+             if(!qPrintInd)
+             cout<<" "<<tmp->data;
+             else
+             stk.push(tmp);
+             
+             q.pop();
+             
+
+             if(tmp->left)
+               q.push(tmp->left);
+             
+             if(tmp->right)
+               q.push(tmp->right);
+        }
+         if(qPrintInd)
+        {
+            while(!stk.empty())
+            {
+                cout<<" "<<stk.top()->data;
+                stk.pop();
+            }
+        }      
+        if(count == 2)
+        {
+           qPrintInd =true;
+           count = 0;
+        }
+        
+    }
+}
+
+int getHightAndParent(treeNode* root , int x , treeNode* &parent , int hight)
+{
+    if(root == NULL)
+    return 0;
+    
+    if(root->data == x)
+    return hight;
+   
+   parent = root;
+   
+    int CheckNodFoundInd = getHightAndParent(root->left , x , parent , hight+1);
+    
+    //we are going to get the hight incase element found
+    if(CheckNodFoundInd != 0)
+       return CheckNodFoundInd;
+       
+     CheckNodFoundInd = getHightAndParent(root->right , x , parent , hight+1); 
+    return CheckNodFoundInd;
+}
+bool findCousin(treeNode* root , int x , int y)
+{
+    if(root == NULL)
+    return false;
+    
+    if(root->data == x || root->data == y)
+    return false;
+    
+    treeNode* parent;
+    int xhight = getHightAndParent(root , x ,parent , 0 );
+    
+    cout<<" hight of x : "<<xhight<<" parent : "<<parent->data;
+    treeNode* yparent;
+    int yhight = getHightAndParent(root , y ,yparent , 0 );
+    
+    if(yparent->data != parent->data && xhight == yhight )
+    return true;
+    else
+    return false;
+    
+}
+
+int checkNumberPresentInTree(treeNode* root , int x)
+{
+    if(root == NULL )
+    return 0;
+     
+     if(root->data == x)
+     return 1;
+     
+     int ind = checkNumberPresentInTree(root->left , x);
+     
+     if(ind)
+     return ind;
+     ind = checkNumberPresentInTree(root->right , x);
+     return ind;
+}
+
+
+treeNode* findInBSTKeyPresent(treeNode* root , int key)
+{
+    if(root == NULL)
+    return NULL;
+    
+    treeNode* curr = root;
+    while(curr != NULL)
+    {
+        if(curr->data == key)
+        {
+             return curr;
+        }
+        else if(key <curr->data)
+        {
+            curr = curr->left;
+        }
+        else if(key > curr->data)
+        {
+            curr = curr->right;
+        }
+    }
+    
+    
+    return NULL;
+    
+}
+
+treeNode* KthSmallestNode(treeNode* root , int &k )
+{
+    if(root == NULL)
+      return NULL;
+ 
+
+    treeNode* left = KthSmallestNode(root->left , k);
+
+     if(left != NULL)
+     return left;
+
+     k = k-1;
+     if(k == 0)
+     {
+       return root;
+     }
+     
+     treeNode* right = KthSmallestNode(root->right , k);
+    
+    return right;
+    
+}
+
+int main()
+{
+    cout<<"\nHello World";
+    treeNode* root = NULL;
+    
+   root = insertBST(root , 100);
+   root = insertBST(root , 50);
+   root = insertBST(root , 20);
+   root = insertBST(root , 60);
+   root = insertBST(root , 10);
+   root = insertBST(root , 30);
+   root = insertBST(root , 55);
+   root = insertBST(root , 65);
+   root = insertBST(root , 150);
+   root = insertBST(root , 130);
+   root = insertBST(root , 120);
+   root = insertBST(root , 140);
+   root = insertBST(root , 200);
+   root = insertBST(root , 175);
+   root = insertBST(root , 300);
+   root = insertBST(root , 160);
+   root = insertBST(root , 180);
+   
+   cout<<"\n";
+   InoderTreePrint(root);
+    cout<<"\n";
+
+    int x= 20;
+    treeNode* tmp = findInBSTKeyPresent(root , x);
+     cout<<"\n";
+    InoderTreePrint(tmp);
+   if(tmp != NULL)
+   cout<<" cousin : "<<tmp->data;
+    return 0;
+}
