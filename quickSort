@@ -1,0 +1,94 @@
+
+/******************************************************************************
+Find more detail on @equalConnect Coach youtube channel
+
+Quicksort algorithm:
+This sorting algorithms is based on following factor
+  - First we need to decide partition 
+  - Then take pivot element as last element of the array (it can be fist/middle element also)
+  - place the pivot element at the right place, inside the working partition, in order to place pivot
+    at right place , take two pointer p1 and p2
+	   - p1 : will keep on moving till partition -1
+	   - p2 : will move when arr[high] <= PivotPoint  and swap arr[p2] , arr[p1]
+  - Once loop is end , swap arr[p2+1] , arr[high]
+  - return p2+1 as new low, so now new partition is low to p2-1 and p2+1 to high
+  repeate this logic in recussion for all partition.`
+  
+Time Complexity :-
+---------------------
+In worst case  : O(n2)
+int average or best case : nlog(n) 
+Space Complexity :- O(n)
+----------------
+*******************************************************************************/
+
+
+#include <iostream>
+
+using namespace std;
+
+void swap(int* a , int* b )
+{
+    
+ int tmp = *a;
+ *a = *b;
+ *b = tmp;
+}
+
+
+int partition (int arr[] , int low , int high)
+{
+ 
+   int i = (low - 1);
+  
+   int pivot = arr[high];
+   
+   for(int j=low;j<=high-1;j++)
+   {
+       
+       if(arr[j] <= pivot)
+       {
+          
+          i++;
+          swap(&arr[j] , &arr[i]);
+           
+       }
+       
+   }
+     swap(&arr[high] , &arr[i+1]);
+     return i+1;
+}
+
+void quickSort(int arr[] , int low , int high)
+{
+    
+    if(low < high )
+    {
+        
+        int pivotPoint = partition(arr , low , high);
+        quickSort(arr , low ,pivotPoint-1);
+        quickSort(arr , pivotPoint+1 , high);
+       
+        
+        
+    }
+}
+
+void printArr(int arr[] , int size)
+{
+    for(int i = 0;i<size;i++)
+    cout<<" "<<arr[i];
+}
+int main()
+{ 
+    
+    int arr[] = {5,1,9,2,8,7,4,3,6};
+ 
+    int size = sizeof(arr)/sizeof(arr[0]);
+    
+    quickSort(arr , 0 , size-1);
+    
+    cout << "size : " <<size<<endl; 
+    printArr(arr,size);
+   return 0;
+}
