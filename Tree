@@ -492,7 +492,20 @@ treeNode* KthSmallestNode(treeNode* root , int &k )
     return right;
     
 }
-
+int getHeightOfTree(treeNode* root)
+{
+    if(root == NULL)
+    return 0;
+    
+    int lHeight =  getHeightOfTree(root->left);
+    int rHeight = getHeightOfTree(root->right);
+    
+    if(lHeight > rHeight)
+    return lHeight+1;
+    else
+    return rHeight+1;
+    
+}
 int main()
 {
     cout<<"\nHello World";
