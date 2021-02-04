@@ -801,6 +801,22 @@ void findPairOfGivenNumber(dnode* root , int sum)
     
     return ;
 }
+
+void printNthFromLastIn_n(node* root, int n)
+{
+    
+    static int i = 0;
+    if(root == NULL)
+    return;
+    
+    printNthFromLastIn_n(root->next ,n);
+    
+    if(++i == n)
+    {
+        cout<<" "<<root->data;
+    }
+    
+}
 int main()
 {
     
