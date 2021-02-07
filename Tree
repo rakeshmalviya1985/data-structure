@@ -492,6 +492,29 @@ treeNode* KthSmallestNode(treeNode* root , int &k )
     return right;
     
 }
+
+void findParentOfNode(treeNode* root , treeNode*& par, int data )
+{
+    if(root == NULL)
+    return ;
+    
+    if(root->data == data)
+    return;
+    
+    par = root;
+    
+    if(data < root->data )
+    {
+         findParentOfNode(root->left ,par,data);
+    }
+    else if(data > root->data )
+    {
+        findParentOfNode(root->right ,par ,data);
+    }
+    
+    return ;
+}
+
 int getHeightOfTree(treeNode* root)
 {
     if(root == NULL)
