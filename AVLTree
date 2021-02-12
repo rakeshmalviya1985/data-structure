@@ -72,7 +72,7 @@ node* leftRotate(node* root)
     tmpRight->left = root;
     root->right = tmpChLeft;
     root->height = max(height(root->left) , height(root->right)) + 1;
-    tmpChLeft->height  = max(height(tmpChLeft->left) , height(tmpChLeft->right)) + 1;
+    tmpRight->height  = max(height(tmpRight->left) , height(tmpRight->right)) + 1;
     
     return tmpRight;
 }
