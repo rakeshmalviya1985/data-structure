@@ -67,7 +67,7 @@ node* leftRotate(node* root)
       return NULL;
       
     node* tmpRight = root->right;
-    node* tmpChLeft = tmpRight->right;
+    node* tmpChLeft = tmpRight->left;
     
     tmpRight->left = root;
     root->right = tmpChLeft;
