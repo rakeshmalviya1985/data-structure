@@ -1,0 +1,39 @@
+/*  Find more detail on equal connect coach @youtube
+*/
+
+
+bool findGivenArrayIsSubset(int arr[] ,int size, int arr1[] , int size1)
+{
+
+
+    map<int , int> myMap;
+    for(int i = 0;i<size;i++)
+     myMap[arr[i]]++;
+     
+     map<int , int>::iterator itr = myMap.begin();
+     
+     while(itr != myMap.end())
+     {
+         
+         cout<<" "<<itr->second;
+         ++itr;
+     }
+    for(int i = 0;i<size1;i++)
+    {
+        
+        if(myMap[arr1[i]] > 0)
+        {
+           myMap[arr1[i]] --; 
+        }
+        else
+        {
+            cout<<"\n arr : "<<arr1[i];
+         return false;
+        }
+        
+    }
+    
+    
+    return true;
+    
+}
