@@ -1,11 +1,3 @@
-  /******************************************************************************
-
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <iostream>
 
 using namespace std;
@@ -56,6 +48,9 @@ void InsertTrieNode(trieNode* root, string str)
 bool searchWordInDis(trieNode* root , string str)
 {
     
+    if(root == NULL)
+    return false;
+    
     for(int i =0 ; i<str.length();i++)
     {
         
@@ -70,6 +65,53 @@ bool searchWordInDis(trieNode* root , string str)
     return (root != NULL && root->isWordEnd);
 }
 
+bool checkEndOfWord(trieNode* root)
+{
+    if(root == NULL)
+       return true;
+       
+     for(int i = 0;i<26;i++)
+     {
+         if(root->child[i])
+            return false;
+     }
+    
+    return true;
+}
+trieNode* removeWord(trieNode* root ,  string str , int depth = 0)
+{
+    
+    if(root == NULL)
+       return NULL;
+       
+    if(depth == str.length())
+    {
+        
+        if(root->isWordEnd)
+            root->isWordEnd = false;
+    
+        if(checkEndOfWord(root))
+        {
+           delete root;
+           root = NULL;
+        }
+            
+        return root;
+    }
+    
+    int index = str[depth] - 'a';
+    root->child[index] = removeWord(root->child[index]  ,str,depth+1 );
+    
+        if(checkEndOfWord(root) && root->isWordEnd == false)
+        {
+           delete root;
+           root = NULL;
+        } 
+        
+        
+        return root;
+    
+}
 int main()
 {
 
@@ -77,7 +119,12 @@ int main()
     InsertTrieNode(root , "rakesh");
     
     std::cout << " "<<searchWordInDis(root ,"rakesh") << std::endl;
-     std::cout << " "<<searchWordInDis(root ,"rakesh") << std::endl;
+
+
+    root = removeWord(root , "rakesh");
+    
+    
+    std::cout << " jj "<<searchWordInDis(root ,"rakesh") << std::endl;
 
     return 0;
 }
