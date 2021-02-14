@@ -1,0 +1,83 @@
+  /******************************************************************************
+
+                              Online C++ Compiler.
+               Code, Compile, Run and Debug C++ program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
+#include <iostream>
+
+using namespace std;
+#include <iostream>
+#include <queue>
+#include <stack>
+#include <bits/stdc++.h>
+#include <vector>
+#include <map>
+using namespace std;
+
+struct trieNode
+{
+  trieNode* child[26];
+  bool isWordEnd;
+};
+
+trieNode* newNode()
+{
+    trieNode* tmp = new trieNode();
+    tmp->isWordEnd = false;
+    for(int i =0;i<26;i++)
+    {
+        tmp->child[i] = NULL;   
+    }
+    
+    return tmp;
+}
+
+void InsertTrieNode(trieNode* root, string str)
+{
+    trieNode *tmpRoot = root;
+
+    for(int i = 0;i<str.length();i++)
+    {
+        int index = str[i] - 'a';
+        if(!tmpRoot->child[index])
+        tmpRoot->child[index] = newNode();
+        
+       tmpRoot =  tmpRoot->child[index];
+        
+                    
+    }
+    
+    tmpRoot->isWordEnd = true;
+}
+
+bool searchWordInDis(trieNode* root , string str)
+{
+    
+    for(int i =0 ; i<str.length();i++)
+    {
+        
+        int index = str[i] - 'a';
+        
+        if(!root->child[index])
+        return false;
+        
+        root = root->child[index];
+    }
+    
+    return (root != NULL && root->isWordEnd);
+}
+
+int main()
+{
+
+    trieNode* root = newNode();
+    InsertTrieNode(root , "rakesh");
+    
+    std::cout << " "<<searchWordInDis(root ,"rakesh") << std::endl;
+     std::cout << " "<<searchWordInDis(root ,"rakesh") << std::endl;
+
+    return 0;
+}
