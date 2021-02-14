@@ -817,6 +817,43 @@ void printNthFromLastIn_n(node* root, int n)
     }
     
 }
+
+node* getTheInterSection(node* root1 , node* root2 )
+{
+    if(root2 == NULL || root1 == NULL)
+       return NULL;
+    map<int , int> myMap;   
+    while(root1 != NULL)
+    {
+     
+       myMap[root1->data]++;   
+        root1 = root1->next;
+    }
+    
+    while(root2 != NULL)
+    {
+     
+       myMap[root2->data]++;   
+        root2 = root2->next;
+    }
+    
+    node* root = NULL;
+    
+    map<int , int>::iterator itr = myMap.begin();
+    
+    while(itr != myMap.end())
+    {
+
+        if(itr->second >= 2)
+        {
+
+            root = insertAtEnd(root ,itr->first);
+        }
+        ++itr;
+    }
+    
+    return root;
+}
 int main()
 {
     
