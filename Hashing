@@ -37,3 +37,40 @@ bool findGivenArrayIsSubset(int arr[] ,int size, int arr1[] , int size1)
     return true;
     
 }
+/*----------------------------------------------------------------------------------------------------------------------------------
+Given an array with repeated elements, the task is to find the maximum distance two occurrences of an element.
+
+Examples:
+
+Input : arr[] = {3, 2, 1, 2, 1, 4, 5, 8, 6, 7, 4, 2}
+Output: 10
+// maximum distance for 2 is 11-1 = 10 
+// maximum distance for 1 is 4-2 = 2 
+// maximum distance for 4 is 10-5 = 5 
+----------------------------------------------------------------------------------------------------------------------------------*/
+int maxDistance(int arr[] , int size)
+{
+    map<int , int> myMap;
+    
+    int maxDist = 0;
+    for(int i = 0;i<size;i++)
+    {
+        if(myMap.find(arr[i]) == myMap.end())
+        {
+            myMap[arr[i]] = i;    
+        }
+        else
+        {
+            
+            //basically idea is to keep storing max maxDist and last return the maxDist
+            int tmp = i-myMap[arr[i]];
+            
+            if(tmp > maxDist)
+               maxDist = tmp;
+        }
+        
+        
+    }
+    
+    return maxDist;
+}
